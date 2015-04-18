@@ -1,0 +1,97 @@
+\documentclass[40pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{cancel}
+\usepackage{datetime}
+\usepackage{fullpage}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg} 
+\author{Dmitri Priimak}
+\title{Josephson Junctions Array}
+\def\spvec#1{\left(\vcenter{\halign{\hfil$##$\hfil\cr \spvecA#1;;}}\right)}
+\def\spvecA#1;{\if;#1;\else #1\cr \expandafter \spvecA \fi}
+\begin{document}
+ \begin{center}
+  \underline{Array of Josephson Junctions in the periodic a/c field.}
+ \end{center}
+  \begin{center}
+    \underline{Rev. 1}
+  \end{center}
+   	\section{Many Josephson Junctions}
+  	\begin{eqnarray}
+  	\frac{\text{d}q}{\text{d}t} &=& q_1 \\
+  	\frac{\text{d}\phi_k}{\text{d}t} &=& i_{dc} 
+  		+ i_1 \cos(\Omega_{1}t) - \sin(\phi_k) 
+  		- q_1 \\
+  	\frac{\text{d}q_1}{\text{d}t} &=&
+  	\frac{1}{l}\left[N \left( i_{dc} 
+  		+ i_1 \cos(\Omega_1 t) - q_1\right)
+  		- \sum_{k=0}^{N-1} \sin(\phi_k) 
+  		\right]
+  		-\frac{r}{l}q_1 - \Omega_0^2 q
+  	\end{eqnarray}
+  	Let us introduce new vector $\mathbf{r} = \spvec{q;\{\phi_k\};q_1}$ and a vector function $\mathbf{f}$ corresponding to the functions on
+  	the right of the equal sign in the equations above.
+	\begin{equation}
+  		\mathbf{f}(t, \mathbf{r})=\spvec{q;
+  		i_{dc} 
+  		  		+ i_1 \cos(\Omega_{1}t) - \sin(\phi_k) 
+  		  		- q_1;
+  		\frac{1}{l}\left[N \left( i_{dc} 
+  		  		+ i_1 \cos(\Omega_1 t) - q_1\right)
+  		  		- \sum_{k=0}^{N-1} \sin(\phi_k) 
+  		  		\right]
+  		  		-\frac{r}{l}q_1 - \Omega_0^2 q}
+  	\end{equation}
+  	Then set of differenetial equations can be written simply as:
+  	\begin{equation}
+  	\frac{\text{d}\mathbf{r}}{\text{d}t}=\mathbf{f}(t, \mathbf{r})
+  	\end{equation}
+  	We use forth order Runge-Kutta method to solve this equation. To than end we step over time with step $\Delta t$. And introduce time step supperscript to $\mathbf{r}$. Thus $\mathbf{r}^t$ and $\mathbf{r}^{t+1}$ are values of $\mathbf{r}$ for two consequetive time steps.
+  	\begin{eqnarray}
+  	\mathbf{k}_1 &=& \mathbf{f}(t, \mathbf{r}^t) \\
+  	\mathbf{\tilde{r}} &=& \mathbf{r}^t + \frac{\Delta t}{2}\mathbf{k}_1 \\
+  	\mathbf{k}_2 &=& \mathbf{f} \left(t + \frac{\Delta t}{2}, \mathbf{\tilde{r}}\right) \\
+  	\mathbf{\tilde{r}} &=& \mathbf{r}^t + \frac{\Delta t}{2}\mathbf{k}_2 \\
+  	\mathbf{k}_3 &=& \mathbf{f} \left(t + \frac{\Delta t}{2}, \mathbf{\tilde{r}}\right) \\  	
+  	\mathbf{\tilde{r}} &=& \mathbf{r}^t + \Delta t\mathbf{k}_3 \\
+  	\mathbf{k}_4 &=& \mathbf{f} \left(t + \Delta t, \mathbf{\tilde{r}}\right)	
+  	\end{eqnarray}
+  	\begin{equation}
+  	\mathbf{r}^{t+1} = \mathbf{r}^t + \frac{\Delta t}{6}\left(\mathbf{k}_1 + 2 \mathbf{k}_2 + 2 \mathbf{k}_3 + \mathbf{k}_4\right)
+  	\end{equation}
+  	\newpage
+  	\section{One Josephson Junction}
+  	\begin{eqnarray}
+  	\frac{\text{d}q}{\text{d}t} &=& q_1 \\
+  	\frac{\text{d}\phi}{\text{d}t} &=& i_{dc} 
+  		+ i_1 \cos(\Omega_{1}t) - \sin(\phi) 
+  		- q_1 \\
+  	\frac{\text{d}q_1}{\text{d}t} &=&
+	\frac{i_{dc}}{l} + 
+	\frac{i_1}{l}\cos(\Omega_1 t) 
+	- \frac{1 + r}{l}q_1 - \frac{1}{l}\sin(\phi) 
+	- \Omega_0^2 q
+  	\end{eqnarray}
+  	Free parameters $i_{dc}, i_1, r, l, \Omega_0, \Omega_1$
+  	\subsection{First Order Euler}
+  	\begin{eqnarray}
+  	q^{t+\Delta t} &=& q^t + q_1 \Delta t \\
+  	\phi^{t+\Delta t} &=& \phi^t + \Delta t
+  	\left[
+  	i_{dc} + i_1 \cos(\Omega_{1}t) - \sin(\phi) 
+  	- q^{t}_1
+  	\right] \\
+  	q^{t+\Delta t}_1 &=& q^t_1 + \Delta t
+  	\left[
+	\frac{i_{dc}}{l} + 
+	\frac{i_1}{l}\cos(\Omega_1 t) 
+	- \frac{1 + r}{l}q^t_1 - \frac{1}{l}\sin(\phi^t) 
+	- \Omega_0^2 q^t  	
+  	\right]
+  	\end{eqnarray}
+  	
+\end{document}
