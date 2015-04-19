@@ -8,6 +8,7 @@
 \usepackage{cancel}
 \usepackage{datetime}
 \usepackage{fullpage}
+\usepackage{verbatim}
 \DeclareGraphicsExtensions{.pdf,.png,.jpg} 
 \author{Dmitri Priimak}
 \title{Josephson Junctions Array}
@@ -50,7 +51,9 @@
   	\begin{equation}
   	\frac{\text{d}\mathbf{r}}{\text{d}t}=\mathbf{f}(t, \mathbf{r})
   	\end{equation}
-  	We use forth order Runge-Kutta method to solve this equation. To than end we step over time with step $\Delta t$. And introduce time step supperscript to $\mathbf{r}$. Thus $\mathbf{r}^t$ and $\mathbf{r}^{t+1}$ are values of $\mathbf{r}$ for two consequetive time steps.
+
+ 	\begin{comment}
+  	We use forth order Runge-Kutta method to solve this equation. To than end we step over time with step $\Delta t$. And introduce time step supperscript to $\mathbf{r}$. Thus $\mathbf{r}^t$ and \mathbf{r}^{t+1}$ are values of $\mathbf{r}$ for two consequetive time steps.
   	\begin{eqnarray}
   	\mathbf{k}_1 &=& \mathbf{f}(t, \mathbf{r}^t) \\
   	\mathbf{\tilde{r}} &=& \mathbf{r}^t + \frac{\Delta t}{2}\mathbf{k}_1 \\
@@ -64,6 +67,7 @@
   	\mathbf{r}^{t+1} = \mathbf{r}^t + \frac{\Delta t}{6}\left(\mathbf{k}_1 + 2 \mathbf{k}_2 + 2 \mathbf{k}_3 + \mathbf{k}_4\right)
   	\end{equation}
   	\newpage
+    \end{comment}
   	\section{One Josephson Junction}
   	\begin{eqnarray}
   	\frac{\text{d}q}{\text{d}t} &=& q_1 \\
@@ -76,7 +80,24 @@
 	- \frac{1 + r}{l}q_1 - \frac{1}{l}\sin(\phi) 
 	- \Omega_0^2 q
   	\end{eqnarray}
-  	Free parameters $i_{dc}, i_1, r, l, \Omega_0, \Omega_1$
+  	Free parameters $i_{dc}, i_1, r, l, \Omega_0, \Omega_1$. And this is the equation we solve, to which end we use 
+  	three different methods: First Order Euler, Midpoint Method and Fourth Order Runge–Kutta and compare 
+	it with c++ code provided by Olesia Pozdniakova, which uses Fourth Order Runge–Kutta. Our program, written in 
+	C, is called \textbf{1jja\_c} and C++ program by Olesia is called \textbf{jja\_cpp\_time\_eval}.
+	First we compare results produced by both programs. 
+	\begin{figure}[h]
+	\includegraphics{figures/experiments_001_and_002.pdf}
+	\caption{Here we are using \textbf{1jja\_c} to compute average voltage $\overline{v}$ across the junction while varying $i_{dc}$. Input parameters are $\Omega_{1}=0.4$, 
+	$i_1=0.3$, 
+	$\phi=0.0$, $\Omega_{0}=0.4$, $b=0.01$, $r=0.0$. Time step $\Delta t=0.001$. Averaging of voltage starts from $t=40$, which is more than sufficient to for the system to settle 
+	down. External period of driving system is determined by parameter $\Omega_1$ and is $T=2\pi/\Omega_1$. Thus original assumption was that we can perform averaging 
+	over just one such period. That turned out not to be the case. Number of periods used for voltage averaging is denoted as $N_{av}$. Red line shows voltage averaged 
+	over time $3T$, while black one over just one period $T$. You can see that for sufficiently large values of $i_{dc}$ there is a difference between these values 
+	of $\overline{v}$. Blue line shows that difference. First there is a long region for $i_{dc}$ from $0$ to about $0.8$ where both averaging techniques give the same 
+	$\overline{v}$. Oddly, however is the presence of two more regions where they match. These two regions are marked by light gray rectangles named $a$ and $b$.}
+	\end{figure}
+
+\begin{comment}
   	\subsection{First Order Euler}
   	\begin{eqnarray}
   	q^{t+\Delta t} &=& q^t + q_1 \Delta t \\
@@ -93,5 +114,5 @@
 	- \Omega_0^2 q^t  	
   	\right]
   	\end{eqnarray}
-  	
+\end{comment}  	
 \end{document}
